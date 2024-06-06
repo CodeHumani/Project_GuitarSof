@@ -19,9 +19,6 @@ export const createLessonsController = async (req, res) => {
 export const updateLessonsController = async (req, res) => {
   try {
     const { id, title, content } = req.body;
-    if (!id || (!title && !content)) {
-      return res.status(400).json({ message: 'please enter data' });
-    }
     const lesson = await updateLessons(id, title, content);
     if (!lesson)  return res.status(400).json({ message: 'Error update lessons' });
     return res.status(201).json(lesson);

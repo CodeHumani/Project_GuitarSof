@@ -10,6 +10,9 @@ export const createLesons  = async (courseId, title, content) => {
 };
 
 export const updateLessons = async (id, title, content) => {
+    if (!id) {
+        return null;
+    }
     let result;
     if (title && !content) {
         result = await pool.query(
@@ -40,12 +43,11 @@ export const getLessonById = async (id) => {
 
 export const getLessonByTittle = async (title) => {
     const result = await pool.query('SELECT * FROM "Lessons" WHERE title = $1', [title] );
-    return result.rows; // Devuelve todas las filas que coincidan
+    return result.rows;
 };
 
 export const getLessonByIdCourse = async (courseId) => {
     const result = await pool.query('SELECT * FROM "Lessons" WHERE courseId = $1', [courseId] );
-    console.log('pipiepie');
     return result.rows;
 };
 

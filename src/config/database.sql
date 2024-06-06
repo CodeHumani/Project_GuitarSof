@@ -30,6 +30,13 @@ CREATE TABLE "Lessons" (
   updatedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (courseId) REFERENCES "Courses" (id) ON DELETE CASCADE
 );
+CREATE TABLE "LessonContent" (
+  id SERIAL PRIMARY KEY,
+  lessonId INT NOT NULL,
+  type VARCHAR(255) NOT NULL,  -- e.g., "document", "image", "video"
+  url VARCHAR(255) NOT NULL,     -- URL or path to the content file
+  FOREIGN KEY (lessonId) REFERENCES "Lessons" (id) ON DELETE CASCADE
+);
 -- Tabla de Comentarios
 CREATE TABLE "Comments" (
   id SERIAL PRIMARY KEY,

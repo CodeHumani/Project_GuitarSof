@@ -36,18 +36,23 @@ export const updateCourse = async (id, title, description) => {
     return result.rows[0];
 };
 
+export const getCourse = async (id) => {
+    const result = await pool.query('SELECT * FROM "Courses" WHERE eliminar = true');
+    return result.rows;
+};
+
 export const getCourseById = async (id) => {
-    const result = await pool.query('SELECT * FROM "Courses" WHERE id = $1', [id] );
+    const result = await pool.query('SELECT * FROM "Courses" WHERE id = $1 AND eliminar = true', [id] );
     return result.rows[0];
 };
 
 export const getCourseByTittle = async (title) => {
-    const result = await pool.query('SELECT * FROM "Courses" WHERE title = $1', [title] );
+    const result = await pool.query('SELECT * FROM "Courses" WHERE title = $1 AND eliminar = true', [title] );
     return result.rows; // Devuelve todas las filas que coincidan
 };
 
 export const getCourseByIdUser = async (userId) => {
-    const result = await pool.query('SELECT * FROM "Courses" WHERE userId = $1', [userId] );
+    const result = await pool.query('SELECT * FROM "Courses" WHERE userId = $1 AND eliminar = true', [userId] );
     return result.rows; // Devuelve todas las filas que coincidan
 };
 

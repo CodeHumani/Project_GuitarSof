@@ -1,15 +1,15 @@
-import { createCourse, updateCourse, deleteCourse, getCourseByTittle, getCourseById, getCourseByIdUser } from '../models/course.model.js';
+import { createCourse, updateCourse, deleteCourse, getCourseByTittle, getCourseById, getCourseByIdUser, getCourse } from '../models/course.model.js';
 import courseSchema  from '../schemas/courseSchema.js';
 import { getUserById } from '../models/auth.model.js';
 import { token } from 'morgan';
 
 export const createCourseController = async (req, res) => {
   try {    
-    const { error, value } = courseSchema.validate(req.body);
-    const { title, description } = value;
+    const { error, value } = courseSchema.validate(req.body, { abortEarly: false });
     if (error) {
-      return res.status(400).json({ message: error.details[0].message });
+      return res.status(400).json({ message: error.details.map(detail => detail.message).join(', ') });
     }
+    const { title, description } = value;
     const userFound =  await getUserById(req.user.id);
     const course = await createCourse(userFound.id, title, description);
     return res.status(201).json(course);
@@ -46,6 +46,15 @@ export const gestTitle =  async (req, res) => {
   try {
     const { title } = req.body;
     const course = await getCourseByTittle(title);
+    return res.status(201).json(course);
+  } catch (error) {
+    return res.status(500).json({ message: 'Error get course', detail: err.message });
+  }
+};
+
+export const gestCourse =  async (req, res) => {
+  try {
+    const course = await getCourse();
     return res.status(201).json(course);
   } catch (error) {
     return res.status(500).json({ message: 'Error get course', detail: err.message });
