@@ -1,82 +1,63 @@
 import { createCourse, updateCourse, deleteCourse, getCourseByTittle, getCourseById, getCourseByIdUser, getCourse } from '../models/course.model.js';
 import courseSchema  from '../schemas/courseSchema.js';
 import { getUserById } from '../models/auth.model.js';
+import { catchedAsync, response } from '../middlewares/catchedAsync.js';
 import { token } from 'morgan';
 
-export const createCourseController = async (req, res) => {
-  try {    
-    const { error, value } = courseSchema.validate(req.body, { abortEarly: false });
-    if (error) {
-      return res.status(400).json({ message: error.details.map(detail => detail.message).join(', ') });
-    }
-    const { title, description } = value;
-    const userFound =  await getUserById(req.user.id);
-    const course = await createCourse(userFound.id, title, description);
-    return res.status(201).json(course);
-  } catch (err) {
-    return res.status(500).json({ message: 'Error creating course', detail: err.message });
+export const createCourseController = catchedAsync(async (req, res) => {   
+  const { error, value } = courseSchema.validate(req.body, { abortEarly: false });
+  if (error) {
+    const err = new Error(error.details[0].message);
+    err.statusCode = 400;
+    throw err;
   }
-};
+  const { title, description } = value;
+  const userFound =  await getUserById(req.user.id);
+  const course = await createCourse(userFound.id, title, description);
+  response(res, 201, course);
+});
 
-export const updateCourseController = async (req, res) => {
-  try {    
+export const updateCourseController = catchedAsync(async (req, res) => {
     const { id, title, description } = req.body;
     if (!id || (!title && !description)) {
-      return res.status(400).json({ message: 'please enter data' });
+      const err = new Error('please enter data');
+      err.statusCode = 400;
+      throw err;
     }
     const course = await updateCourse(id, title, description);
-    if (!course)  return res.status(400).json({ message: 'Error update course' });
-    return res.status(201).json(course);
-  } catch (err) {
-    return res.status(500).json({ message: 'Error update course', detail: err.message });
-  }
-};
+    if (!course) {
+      const err = new Error('Update not found');
+      err.statusCode = 400;
+      throw err;
+    }
+    response(res, 201, course);
+});
 
-export const deleteCourseController = async (req, res) => {
-  try {    
+export const deleteCourseController = catchedAsync(async (req, res) => {
     const { id } = req.body;
     const course = await deleteCourse(id);
-    return res.status(201).json(course);
-  } catch (err) {
-    return res.status(500).json({ message: 'Error delete course', detail: err.message });
-  }
-};
+    response(res, 201, course);
+});
 
-export const gestTitle =  async (req, res) => {
-  try {
+export const gestTitle =  catchedAsync(async (req, res) => {
     const { title } = req.body;
     const course = await getCourseByTittle(title);
-    return res.status(201).json(course);
-  } catch (error) {
-    return res.status(500).json({ message: 'Error get course', detail: err.message });
-  }
-};
+    response(res, 201, course);
+});
 
-export const gestCourse =  async (req, res) => {
-  try {
+export const gestCourse =  catchedAsync(async (req, res) => {
     const course = await getCourse();
-    return res.status(201).json(course);
-  } catch (error) {
-    return res.status(500).json({ message: 'Error get course', detail: err.message });
-  }
-};
+    response(res, 201, course);
+});
 
-export const gestId =  async (req, res) => {
-  try {
+export const gestId =  catchedAsync(async (req, res) => {
     const { id } = req.body;
     const course = await getCourseById(id);
-    return res.status(201).json(course);
-  } catch (error) {
-    return res.status(500).json({ message: 'Error get course', detail: err.message });
-  }
-};
+    response(res, 201, course);
+});
 
-export const gestUserCour =  async (req, res) => {
-  try {
+export const gestUserCour =  catchedAsync(async (req, res) => {
     const userFound =  await getUserById(req.user.id);
     const course = await getCourseByIdUser(userFound.id);
-    return res.status(201).json(course);
-  } catch (error) {
-    return res.status(500).json({ message: 'Error get course', detail: err.message });
-  }
-};
+    response(res, 201, course);
+});

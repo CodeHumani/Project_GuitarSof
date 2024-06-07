@@ -11,6 +11,6 @@ router.get('/title', authRequired, gestTitle);
 router.get('/id', authRequired, gestId);
 router.get('/idUser', authRequired, gestUserCour);
 
-router.get('/course', authRequired, gestCourse);
+router.get('/course', gestCourse);
 
 export default router;

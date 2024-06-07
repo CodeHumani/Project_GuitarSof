@@ -1,15 +1,11 @@
 import pool from '../config/db.js';
 
 export const createCourse  = async (userId, title, description) => {
-    try {
-        const result = await pool.query(
-            'INSERT INTO "Courses" (userId, title, description) VALUES ($1, $2, $3) RETURNING id, userId, title, description',
-        [userId, title, description]
-        );
-        return result.rows[0];
-    } catch (error) {
-        
-    }
+    const result = await pool.query(
+        'INSERT INTO "Courses" (userId, title, description) VALUES ($1, $2, $3) RETURNING id, userId, title, description',
+    [userId, title, description]
+    );
+    return result.rows[0];
 };
 
 export const updateCourse = async (id, title, description) => {

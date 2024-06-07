@@ -11,3 +11,12 @@ export const authRequired = (req, res, next) => {
         next()
     })
 };
+
+export const checkNotAuthenticated = (req, res, next) => {
+  const { token } = req.cookies;
+  if (token) {
+    return res.status(401).json({ message: "token authorization exist" });
+  } else {
+    next();
+  }
+};
