@@ -1,0 +1,69 @@
+Funcionalidades del Software:
+Gestionar Usuario (web y móvil):
+
+Registro y Login: Ya tienes esto implementado.
+Perfil de Usuario: Crear, leer, actualizar y eliminar perfiles de usuario.
+Autenticación y Autorización: Uso de JWT (JSON Web Tokens) para proteger las rutas.
+Exportar Tablaturas de Canciones (web):
+
+Crear una funcionalidad que permita al usuario exportar tablaturas en diferentes formatos (PDF, texto, etc.).
+Utilizar bibliotecas como pdfkit para la generación de PDFs.
+Visualizar Afinador de Guitarra (web y móvil):
+
+Integrar una API o crear una lógica de afinador utilizando Web Audio API en el frontend y un endpoint en el backend para posibles configuraciones.
+Gestionar Suscripción (móvil):
+
+Implementar un sistema de suscripción utilizando una pasarela de pagos como Stripe.
+Crear endpoints para manejar la creación, actualización y cancelación de suscripciones.
+Gestionar Acordes (móvil):
+
+Crear, leer, actualizar y eliminar acordes.
+Estructurar los datos de los acordes en una base de datos.
+Realizar Lecciones (móvil):
+
+Crear un sistema de lecciones donde se pueda seguir el progreso del usuario.
+Crear endpoints para manejar el contenido de las lecciones.
+Visualizar Tablaturas de Canciones (web y móvil):
+
+Crear endpoints para servir las tablaturas.
+Integrar con un visor de tablaturas en el frontend.
+Crear Cursos Online (opcional):
+
+Crear un sistema de gestión de cursos.
+Implementar roles y permisos para los usuarios que crean contenido y los que consumen.
+Integrar con un servicio de almacenamiento para los videos y documentos (por ejemplo, AWS S3)
+
+
+
+
+
+
+
+
+
+
+import { Router } from "express";
+import multer from "multer";
+import fs from 'fs';
+
+const router = Router();
+
+const upload = multer({ dest: 'uploads/'});
+
+router.post('/image', upload.single('imagenPerfil'), (req, res) => {
+    console.log(req.file);
+    saveImage(req.file);
+    res.send('Final');
+});
+
+router.post('/images', upload.array('imagenPerfil', 10), (req, res) => {
+    req.files.map(saveImage)
+    res.send('Final');
+});
+
+function saveImage(file) {
+    const newPath = `./uploads/${file.originalname}`;
+    fs.renameSync(file.path, newPath);
+    return newPath;
+}
+export default router;

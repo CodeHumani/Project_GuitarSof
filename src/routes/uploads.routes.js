@@ -1,11 +1,15 @@
 import { Router } from "express";
 import { createLessonContentController, updateLessonContentController, getLessonContentByIdController, getLessonContentByLessonIdController, deleteLessonContentController } from '../controllers/lessonCont.controllers.js';
 import { authRequired } from '../middlewares/validateToken.js';
+import multer from 'multer';
 
 const router = Router();
 
-router.post('/lessonContent', authRequired, createLessonContentController);
-router.put('/lessonContent', authRequired, updateLessonContentController);
+const upload = multer({ dest: 'uploads/'});
+
+router.post('/create', upload.single('url'), createLessonContentController);
+router.put('/lessonContent', upload.single('url'), updateLessonContentController);
+
 router.get('/lessonContent', getLessonContentByIdController);
 router.get('/lessonContent/lesson', getLessonContentByLessonIdController);
 router.delete('/lessonContent', authRequired, deleteLessonContentController);

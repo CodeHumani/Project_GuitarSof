@@ -5,7 +5,7 @@ import authRoutes from '../routes/auth.routes.js';
 import authCourse from '../routes/course.routes.js';
 import authLessons from '../routes/lesson.routes.js';
 import authComment from '../routes/commet.routes.js';
-import errorHandler from '../middlewares/catchedAsync.js'; // Middleware de manejo de errores
+import errorHandler from '../middlewares/catchedAsync.js';
 import uploads from '../routes/uploads.routes.js';
 
 const app = express();

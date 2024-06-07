@@ -1,6 +1,9 @@
 import { createLessonContent, updateLessonContent, getLessonContentById, getLessonContentByLessonId, deleteLessonContent } from '../models/lessonCont.model.js';
 import lessonContentSchema from '../schemas/lessonContentSchema.js';
 import { catchedAsync, response } from '../middlewares/catchedAsync.js';
+import fs from 'fs';
+import path from 'path';
+import multer from 'multer';
 
 export const createLessonContentController = catchedAsync(async (req, res) => {
     const { error, value } = lessonContentSchema.validate(req.body);
@@ -10,13 +13,26 @@ export const createLessonContentController = catchedAsync(async (req, res) => {
         throw err;
     }
     const { lessonId, type, url } = value;
-    const lessonContent = await createLessonContent(lessonId, type, url);
+    saveImage(req.file, lessonId);
+    console.log(req.file);
+    const lessonContent = await createLessonContent(lessonId, type, req.file.originalname);
     response(res, 201, lessonContent);
 });
 
+function saveImage(file, lessonId) { // aca tienes modificar
+    const dir = `./uploads/${lessonId}`;
+    if (!fs.existsSync(dir)) {
+        console.log('Para poder crear nueva carpeta');
+    }
+    const newPath = `./uploads/${file.originalname}`;
+    fs.renameSync(file.path, newPath);
+    return newPath;
+}
+
 export const updateLessonContentController = catchedAsync(async (req, res) => {
     const { id, type, url } = req.body;
-    const lessonContent = await updateLessonContent(id, type, url);
+    const updatedUrl = req.file ? saveImage(req.file, 1) : null;
+    const lessonContent = await updateLessonContent(id, type, updatedUrl);
     if (!lessonContent) {
         const err = new Error('Error updating lesson content');
         err.statusCode = 400;

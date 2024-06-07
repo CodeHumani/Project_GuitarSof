@@ -5,8 +5,11 @@ import { authRequired, checkNotAuthenticated } from '../middlewares/validateToke
 const router = Router();
 
 router.post('/register', checkNotAuthenticated, register);
+
 router.post('/login', checkNotAuthenticated, login);
+
 router.post('/logout', authRequired, logout);
+
 router.get("/profile", authRequired, profile);
 
 export default router;
