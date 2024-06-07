@@ -7,7 +7,8 @@ const router = Router();
 router.post('/create', authRequired, createCommentController);
 router.put('/update', authRequired, updateCommentController);
 router.put('/delete', authRequired, deleteCommentController);
-router.get("/get", authRequired, getCommentController);
-router.get("/getLesson", authRequired, getCommentControllerlessons);
+
+router.get("/get", getCommentController);
+router.get("/getLesson", getCommentControllerlessons);
 
 export default router;

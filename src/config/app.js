@@ -6,6 +6,7 @@ import authCourse from '../routes/course.routes.js';
 import authLessons from '../routes/lesson.routes.js';
 import authComment from '../routes/commet.routes.js';
 import errorHandler from '../middlewares/catchedAsync.js'; // Middleware de manejo de errores
+import uploads from '../routes/uploads.routes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.use(cookieParser());
 app.use("/apis/gui",authRoutes);
 app.use("/apis/curso",authCourse);
 app.use("/apis/leccion",authLessons);
+app.use("/apis/contLeccion", uploads);
 app.use("/apis/comentario",authComment);
 
 app.use(errorHandler);

@@ -7,10 +7,10 @@ const router = Router();
 router.post('/create', authRequired, createCourseController);
 router.put('/update', authRequired, updateCourseController);
 router.put('/delete', authRequired, deleteCourseController);
-router.get('/title', authRequired, gestTitle);
-router.get('/id', authRequired, gestId);
 router.get('/idUser', authRequired, gestUserCour);
 
-router.get('/course', gestCourse);
+router.get('/title', gestTitle);
+router.get('/id', gestId);
+router.get('/course',authRequired, gestCourse);
 
 export default router;
