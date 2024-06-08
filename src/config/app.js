@@ -7,6 +7,7 @@ import authLessons from '../routes/lesson.routes.js';
 import authComment from '../routes/commet.routes.js';
 import errorHandler from '../middlewares/catchedAsync.js';
 import uploads from '../routes/uploads.routes.js';
+//import tablatureRoutes from '../routes/tablature.routes.js';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use("/apis/curso",authCourse);
 app.use("/apis/leccion",authLessons);
 app.use("/apis/contLeccion", uploads);
 app.use("/apis/comentario",authComment);
+//app.use('/apis/tablature', tablatureRoutes);
 
 app.use(errorHandler);
 
