@@ -35,9 +35,19 @@ export const updateLessonContent = async (id, type, url) => {
     return result.rows[0];
 };
 
+export const getLessonContentAll = async () => {
+    const result = await pool.query('SELECT * FROM "LessonContent"',);
+    return result.rows;
+};
+
 export const getLessonContentById = async (id) => {
     const result = await pool.query('SELECT * FROM "LessonContent" WHERE id = $1', [id]);
     return result.rows[0];
+};
+
+export const verifi = async (lessonId, url) => {
+    const result = await pool.query('SELECT * FROM "LessonContent" WHERE lessonId = $1 and url = $2', [lessonId, url]);
+    return result.rows.length;
 };
 
 export const getLessonContentByLessonId = async (lessonId) => {

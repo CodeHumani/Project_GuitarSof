@@ -30,6 +30,7 @@ CREATE TABLE "Lessons" (
   updatedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (courseId) REFERENCES "Courses" (id) ON DELETE CASCADE
 );
+-- Tabla de Lecciones Contenido
 CREATE TABLE "LessonContent" (
   id SERIAL PRIMARY KEY,
   lessonId INT NOT NULL,

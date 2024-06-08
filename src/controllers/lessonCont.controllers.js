@@ -1,4 +1,4 @@
-import { createLessonContent, updateLessonContent, getLessonContentById, getLessonContentByLessonId, deleteLessonContent } from '../models/lessonCont.model.js';
+import { createLessonContent, updateLessonContent, getLessonContentById, verifi, getLessonContentAll, getLessonContentByLessonId, deleteLessonContent } from '../models/lessonCont.model.js';
 import lessonContentSchema from '../schemas/lessonContentSchema.js';
 import { catchedAsync, response } from '../middlewares/catchedAsync.js';
 import fs from 'fs';
@@ -7,37 +7,50 @@ import multer from 'multer';
 
 export const createLessonContentController = catchedAsync(async (req, res) => {
     const { error, value } = lessonContentSchema.validate(req.body);
-    if (error) {
+    const { lessonId, type, url } = value;
+    ensureDirectoryExistence(`./uploads/${lessonId}`)
+    saveImage(req.file, lessonId);
+    const existingContent = await verifi(lessonId, req.file.originalname);
+    if (existingContent || error) {
         const err = new Error(error.details[0].message);
         err.statusCode = 400;
         throw err;
     }
-    const { lessonId, type, url } = value;
-    saveImage(req.file, lessonId);
-    console.log(req.file);
     const lessonContent = await createLessonContent(lessonId, type, req.file.originalname);
     response(res, 201, lessonContent);
 });
 
-function saveImage(file, lessonId) { // aca tienes modificar
-    const dir = `./uploads/${lessonId}`;
-    if (!fs.existsSync(dir)) {
-        console.log('Para poder crear nueva carpeta');
+function ensureDirectoryExistence(dirPath) {
+    if (fs.existsSync(dirPath)) {
+        return true;
     }
-    const newPath = `./uploads/${file.originalname}`;
+    fs.mkdirSync(dirPath, { recursive: true });
+    return true;
+};
+
+function saveImage(file, lessonId) {
+    const newPath = `./uploads/${lessonId}/${file.originalname}`;
     fs.renameSync(file.path, newPath);
     return newPath;
 }
 
 export const updateLessonContentController = catchedAsync(async (req, res) => {
-    const { id, type, url } = req.body;
-    const updatedUrl = req.file ? saveImage(req.file, 1) : null;
-    const lessonContent = await updateLessonContent(id, type, updatedUrl);
-    if (!lessonContent) {
-        const err = new Error('Error updating lesson content');
-        err.statusCode = 400;
-        throw err;
+    const { id, type} = req.body;
+    const codigo = await getLessonContentById(id);
+    console.log(codigo.lessonid);
+    if(req.file) {
+        ensureDirectoryExistence(`./uploads/${codigo.lessonid}`);
+        saveImage(req.file, codigo.lessonid);
+        const existingContent = await verifi(codigo.lessonid, req.file.originalname);
+        if (existingContent) {
+            const err = new Error(error.details[0].message);
+            err.statusCode = 400;
+            throw err;
+        }
+        const lessonContent = await updateLessonContent(id, type, req.file.originalname);
+        response(res, 201, lessonContent);
     }
+    const lessonContent = await updateLessonContent(id, type, null);
     response(res, 201, lessonContent);
 });
 
@@ -49,6 +62,11 @@ export const getLessonContentByIdController = catchedAsync(async (req, res) => {
         err.statusCode = 400;
         throw err;
     }
+    response(res, 201, lessonContent);
+});
+
+export const getLessonContAllController = catchedAsync(async (req, res) => {
+    const lessonContent = await getLessonContentAll();
     response(res, 201, lessonContent);
 });
 
