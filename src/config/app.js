@@ -17,7 +17,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/apis/gui",authRoutes);
+app.use("/apis",authRoutes);
 app.use("/apis/curso",authCourse);
 app.use("/apis/leccion",authLessons);
 app.use("/apis/contLeccion", authRequired, uploads);
