@@ -34,8 +34,7 @@ CREATE TABLE "Lessons" (
 CREATE TABLE "LessonContent" (
   id SERIAL PRIMARY KEY,
   lessonId INT NOT NULL,
-  type VARCHAR(255) NOT NULL,  -- e.g., "document", "image", "video"
-  url VARCHAR(255) NOT NULL,     -- URL or path to the content file
+  url VARCHAR(255) NOT NULL,
   createdAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (lessonId) REFERENCES "Lessons" (id) ON DELETE CASCADE
