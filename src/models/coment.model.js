@@ -27,12 +27,12 @@ export const deleteCourse = async (id) => {
     return result.rows[0];
 };
 
-export const getCommentByUser = async (lessonId, userId) => {
-    const result = await pool.query('SELECT * FROM "Comments" WHERE lessonId = $1 and userId = $2 and eliminar= true', [lessonId, userId] );
-    return result.rows; // Devuelve todas las filas que coincidan
+export const getCommentByUser = async (id) => {
+    const result = await pool.query('SELECT * FROM "Comments" WHERE id = $1 and eliminar= true', [id] );
+    return result.rows; 
 };
 
 export const getCommentByLessons = async (lessonId) => {
     const result = await pool.query('SELECT * FROM "Comments" WHERE lessonId = $1 and eliminar = true', [lessonId] );
-    return result.rows; // Devuelve todas las filas que coincidan
+    return result.rows; 
 };

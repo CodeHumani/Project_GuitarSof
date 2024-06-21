@@ -30,14 +30,8 @@ export const deleteCommentController = catchedAsync(async (req, res) => {
 });
 
 export const getCommentController = catchedAsync(async (req, res) => {
-  const { lessonId } = req.body;
-  const userFound = await getUserById(req.user.id);
-  if (!userFound) {
-    const err = new Error('User not found');
-    err.statusCode = 404;
-    throw err;
-  }
-  const comment = await getCommentByUser(lessonId, userFound.id);
+  const { id } = req.body;
+  const comment = await getCommentByUser(id);
   response(res, 200, comment);
 });
 
