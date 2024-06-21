@@ -15,7 +15,7 @@ export const register = catchedAsync(async (req, res) => {
   const user = await createUser(name, email, password);
   const tokens = await createAccesToken({ id: user.id });
   res.cookie('token', tokens);
-  response(res, 201, { id: user.id, name: user.name, email: user.email });
+  response(res, 201, { id: userFound.id, email: userFound.email, tokens });
 });
 
 export const login = catchedAsync(async (req, res) => {
@@ -28,7 +28,7 @@ export const login = catchedAsync(async (req, res) => {
   }
   const token = await createAccesToken({ id: userFound.id });
   res.cookie('token', token);
-  response(res, 200, { id: userFound.id, email: userFound.email });
+  response(res, 200, { id: userFound.id, email: userFound.email, token });
 });
 
 export const logout = catchedAsync(async (req, res) => {

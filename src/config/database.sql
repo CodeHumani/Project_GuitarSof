@@ -57,11 +57,11 @@ CREATE TABLE "Purchases" (
   id SERIAL PRIMARY KEY,
   userId INT NOT NULL,
   courseId INT NOT NULL,
-  paymentMethod VARCHAR(255) NOT NULL,
+  payentMethod VARCHAR(255) NOT NULL,
   cardNumber VARCHAR(20), -- Número de la tarjeta (cifrado en la aplicación)
   cardHolderName VARCHAR(255), -- Nombre del titular de la tarjeta
   cardExpirationDate DATE, -- Fecha de expiración de la tarjeta
-  coursePrice DECIMAL(10, 2) NOT NULL, -- Precio del curso
+  coursePrice DECIMAL(10, 2) NOT NULL, -- Precio del cursom
   purchaseTime TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   eliminar BOOLEAN DEFAULT true NOT NULL,
   FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE,
