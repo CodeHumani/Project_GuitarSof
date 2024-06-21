@@ -1,31 +1,41 @@
 import pool from '../config/db.js';
 
-export const createCourse  = async (userId, title, description) => {
+export const createCourse  = async (userId, title, description, price) => {
     const result = await pool.query(
-        'INSERT INTO "Courses" (userId, title, description) VALUES ($1, $2, $3) RETURNING id, userId, title, description',
-    [userId, title, description]
+        'INSERT INTO "Courses" (userId, title, description, price) VALUES ($1, $2, $3, $4) RETURNING *',
+    [userId, title, description, price]
     );
     return result.rows[0];
 };
 
-export const updateCourse = async (id, title, description) => {
-    let result;
-    if (title && !description) {
-        result = await pool.query(
-            'UPDATE "Courses" SET title = $1 WHERE id = $2 AND eliminar = true RETURNING *', 
-            [title, id]
-        );
-    } else if (!title && description) {
-        result = await pool.query(
-            'UPDATE "Courses" SET description = $1 WHERE id = $2 AND eliminar = true RETURNING *', 
-            [description, id]
-        );
-    } else {
-        result = await pool.query(
-            'UPDATE "Courses" SET title = $1, description = $2 WHERE id = $3 AND eliminar = true RETURNING *', 
-            [title, description, id]
-        );
+export const updateCourse = async (id, title, description, price) => {
+    if (!id) {
+        return null;
     }
+    const fields = [];
+    const values = [];
+    let query = 'UPDATE "Courses" SET ';
+    if (title) {
+        fields.push('title');
+        values.push(title);
+    }
+    if (description) {
+        fields.push('description');
+        values.push(description);
+    }
+    if (price !== undefined) {
+        fields.push('price');
+        values.push(price);
+    }
+    if (fields.length === 0) {
+        return null;
+    }
+    fields.push('updatedAt');
+    values.push(new Date());
+    query += fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
+    query += ` WHERE id = $${fields.length + 1} AND eliminar = true RETURNING *`;
+    values.push(id);
+    const result = await pool.query(query, values);
     if (result.rowCount === 0) {
         return null;
     }
@@ -50,6 +60,14 @@ export const getCourseByTittle = async (title) => {
 export const getCourseByIdUser = async (userId) => {
     const result = await pool.query('SELECT * FROM "Courses" WHERE userId = $1 AND eliminar = true', [userId] );
     return result.rows; // Devuelve todas las filas que coincidan
+};
+
+export const getByUserAndCourse = async (userId, id) => {
+    const result = await pool.query(
+        'SELECT * FROM "Courses" WHERE userId = $1 AND id = $2 AND eliminar = true',
+        [userId, id]
+    );
+    return result.rows[0];
 };
 
 export const deleteCourse = async (id) => {

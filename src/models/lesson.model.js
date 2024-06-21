@@ -13,23 +13,26 @@ export const updateLessons = async (id, title, content) => {
     if (!id) {
         return null;
     }
-    let result;
-    if (title && !content) {
-        result = await pool.query(
-            'UPDATE "Lessons" SET title = $1 WHERE id = $2 AND eliminar = true RETURNING *', 
-            [title, id]
-        );
-    } else if (!title && content) {
-        result = await pool.query(
-            'UPDATE "Lessons" SET content = $1 WHERE id = $2 AND eliminar = true RETURNING *', 
-            [content, id]
-        );
-    } else {
-        result = await pool.query(
-            'UPDATE "Lessons" SET title = $1, content = $2 WHERE id = $3 AND eliminar = true RETURNING *', 
-            [title, content, id]
-        );
+    const fields = [];
+    const values = [];
+    let query = 'UPDATE "Lessons" SET ';
+    if (title) {
+        fields.push('title');
+        values.push(title);
     }
+    if (content) {
+        fields.push('content');
+        values.push(content);
+    }
+    if (fields.length === 0) {
+        return null;
+    }
+    fields.push('updatedAt');
+    values.push(new Date());
+    query += fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
+    query += ` WHERE id = $${fields.length + 1} AND eliminar = true RETURNING *`;
+    values.push(id);
+    const result = await pool.query(query, values);
     if (result.rowCount === 0) {
         return null;
     }

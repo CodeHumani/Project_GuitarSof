@@ -1,30 +1,28 @@
 import { createCourse, updateCourse, deleteCourse, getCourseByTittle, getCourseById, getCourseByIdUser, getCourse } from '../models/course.model.js';
 import courseSchema  from '../schemas/courseSchema.js';
-import { getUserById } from '../models/auth.model.js';
 import { catchedAsync, response } from '../middlewares/catchedAsync.js';
 import { token } from 'morgan';
 
 export const createCourseController = catchedAsync(async (req, res) => {   
   const { error, value } = courseSchema.validate(req.body, { abortEarly: false });
+  const { title, description, price } = value;
   if (error) {
     const err = new Error(error.details[0].message);
     err.statusCode = 400;
     throw err;
   }
-  const { title, description } = value;
-  const userFound =  await getUserById(req.user.id);
-  const course = await createCourse(userFound.id, title, description);
+  const course = await createCourse(req.user.id, title, description, price);
   response(res, 201, course);
 });
 
 export const updateCourseController = catchedAsync(async (req, res) => {
-    const { id, title, description } = req.body;
-    if (!id || (!title && !description)) {
+    const { id, title, description, price } = req.body;
+    if (!id || (!title && !description && !price)) {
       const err = new Error('please enter data');
       err.statusCode = 400;
       throw err;
     }
-    const course = await updateCourse(id, title, description);
+    const course = await updateCourse(id, title, description, price);
     if (!course) {
       const err = new Error('Update not found');
       err.statusCode = 400;
@@ -57,7 +55,6 @@ export const gestId =  catchedAsync(async (req, res) => {
 });
 
 export const gestUserCour =  catchedAsync(async (req, res) => {
-    const userFound =  await getUserById(req.user.id);
-    const course = await getCourseByIdUser(userFound.id);
+    const course = await getCourseByIdUser(req.user.id);
     response(res, 201, course);
 });
