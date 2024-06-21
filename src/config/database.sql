@@ -56,16 +56,26 @@ CREATE TABLE "Comments" (
 CREATE TABLE "Purchases" (
   id SERIAL PRIMARY KEY,
   userId INT NOT NULL,
-  courseId INT NOT NULL,
-  payentMethod VARCHAR(255) NOT NULL,
+  paymentMethod VARCHAR(255) NOT NULL,
   cardNumber VARCHAR(20), -- Número de la tarjeta (cifrado en la aplicación)
   cardHolderName VARCHAR(255), -- Nombre del titular de la tarjeta
   cardExpirationDate DATE, -- Fecha de expiración de la tarjeta
-  coursePrice DECIMAL(10, 2) NOT NULL, -- Precio del cursom
+  totalAmount DECIMAL(10, 2) NOT NULL, -- Monto total de la compra
   purchaseTime TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   eliminar BOOLEAN DEFAULT true NOT NULL,
-  FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE,
+  FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE
+);
+-- Tabla de details de Compra
+CREATE TABLE "PurchaseDetails" (
+  id SERIAL PRIMARY KEY,
+  purchaseId INT NOT NULL,
+  courseId INT NOT NULL,
+  coursePrice DECIMAL(10, 2) NOT NULL, -- Precio del curso
+  userId INT NOT NULL,
+  FOREIGN KEY (purchaseId) REFERENCES "Purchases" (id) ON DELETE CASCADE,
   FOREIGN KEY (courseId) REFERENCES "Courses" (id) ON DELETE CASCADE,
+  FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE
+  UNIQUE (purchaseId, courseId),
   UNIQUE (userId, courseId)
 );
 

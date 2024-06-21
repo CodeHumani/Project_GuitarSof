@@ -15,7 +15,7 @@ export const register = catchedAsync(async (req, res) => {
   const user = await createUser(name, email, password);
   const tokens = await createAccesToken({ id: user.id });
   res.cookie('token', tokens);
-  response(res, 201, { id: userFound.id, email: userFound.email, tokens });
+  response(res, 201, { id: user.id, email: user.email, tokens });
 });
 
 export const login = catchedAsync(async (req, res) => {
