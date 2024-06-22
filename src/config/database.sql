@@ -34,11 +34,13 @@ CREATE TABLE "Lessons" (
 -- Tabla de Lecciones Contenido
 CREATE TABLE "LessonContent" (
   id SERIAL PRIMARY KEY,
-  lessonId INT NOT NULL,
   url VARCHAR(255) NOT NULL,
+  lessonId INT NOT NULL,
+  courseId INT NOT NULL,
   createdAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   updatedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (lessonId) REFERENCES "Lessons" (id) ON DELETE CASCADE
+  FOREIGN KEY (lessonId) REFERENCES "Lessons" (id) ON DELETE CASCADE,
+  FOREIGN KEY (courseId) REFERENCES "Courses" (id) ON DELETE CASCADE
 );
 -- Tabla de Comentarios
 CREATE TABLE "Comments" (
@@ -74,7 +76,7 @@ CREATE TABLE "PurchaseDetails" (
   userId INT NOT NULL,
   FOREIGN KEY (purchaseId) REFERENCES "Purchases" (id) ON DELETE CASCADE,
   FOREIGN KEY (courseId) REFERENCES "Courses" (id) ON DELETE CASCADE,
-  FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE
+  FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE,
   UNIQUE (purchaseId, courseId),
   UNIQUE (userId, courseId)
 );
@@ -90,3 +92,24 @@ CREATE TABLE "Tablatures" (
   updatedAt TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE
 );
+
+-- Eliminar el trigger y la función si existen
+DROP TRIGGER IF EXISTS set_course_id_trigger ON "LessonContent";
+DROP FUNCTION IF EXISTS set_course_id();
+
+-- Función para actualizar courseId en LessonContent
+CREATE OR REPLACE FUNCTION set_course_id()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Actualizar el courseId en LessonContent basado en el lessonId
+    NEW.courseId := (SELECT courseId FROM "Lessons" WHERE id = NEW.lessonId);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Disparador para ejecutar la función antes de insertar en LessonContent
+CREATE TRIGGER set_course_id_trigger
+BEFORE INSERT ON "LessonContent"
+FOR EACH ROW
+EXECUTE PROCEDURE set_course_id();
+

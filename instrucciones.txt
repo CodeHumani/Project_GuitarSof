@@ -78,10 +78,10 @@ http://localhost:3000/apis/contLeccion/lessonContent   delete
 http://localhost:3000/apis/contLeccion/lessonContent/:id   get
 muestra por id del contenido de la leccion
 
-http://localhost:3000/apis/contLeccion/lesson/:lessonId   get
+
+http://localhost:3000/apis/contLeccion/lessonContent/lesson/4   get
 por leccion muestra todo el contenido que tiene el lessonId
 
-http://localhost:3000/apis/contLeccion/lesson/:lessonId   get
 
 http://localhost:3000/apis/contLeccion/getAll   get
 muestra todo
