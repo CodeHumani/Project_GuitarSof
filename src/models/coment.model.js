@@ -13,9 +13,6 @@ export const updateComment = async (id, content) => {
         'UPDATE "Comments" SET content = $2 WHERE id = $1 AND eliminar = true RETURNING *', 
         [id, content]
     );
-    if (result.rowCount === 0) {
-        return null;
-    }
     return result.rows[0];
 };
 
