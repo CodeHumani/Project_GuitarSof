@@ -32,7 +32,8 @@ export const getLessonContentAll = async () => {
 };
 
 export const getLessonContentById = async (id) => {
-    return getCourseByFilters('LessonContent', { id });
+    const result = await pool.query('SELECT * FROM "LessonContent" WHERE id = $1', [id]);
+    return result.rows;
 };
 
 export const verifi = async (lessonId, url) => {
@@ -41,8 +42,9 @@ export const verifi = async (lessonId, url) => {
 };
 
 export const getLessonContentByLessonId = async (lessonId) => {
-    return getCourseByFilters('LessonContent', { lessonId });
-};
+    const result = await pool.query('SELECT * FROM "LessonContent" WHERE lessonId = $1', [lessonId]);
+    return result.rows;
+}
 
 export const deleteLessonContent = async (id) => {
     const result = await pool.query(
