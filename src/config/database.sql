@@ -97,6 +97,8 @@ ALTER TABLE "LessonContent" ADD COLUMN tipo VARCHAR(255) NOT NULL DEFAULT 'youtu
 
 ALTER TABLE "Lessons" ADD COLUMN imagePath VARCHAR(255) NULL;
 
+ALTER TABLE "Lessons" ADD COLUMN url VARCHAR(255) NULL;
+
 -- Eliminar el trigger y la función si existen
 DROP TRIGGER IF EXISTS set_course_id_trigger ON "LessonContent";
 DROP FUNCTION IF EXISTS set_course_id();

@@ -2,14 +2,11 @@ import pkg from 'pg';
 const { Pool } = pkg;
 
 const pool = new Pool({
-  user: 'root',
-  host: 'dpg-cpsfns08fa8c739682og-a.oregon-postgres.render.com',
-  database: 'test_database_xa9m',
-  password: 'iEhIFdxZTWLSW7eUgcuwd6kSMUgiEEpo',
+  user: 'postgres',
+  host: 'localhost',
+  database: 'guitar',
+  password: 'Medrano73697178',
   port: 5432,
-  ssl: {
-    rejectUnauthorized: false
-  }
 });
 
-export default pool;
+export default pool;

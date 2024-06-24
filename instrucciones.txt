@@ -3,9 +3,12 @@ http://localhost:3000/apis/register       post
 
 http://localhost:3000/apis/login          pot
 
-http://localhost:3000/apis/logout         post
        
 http://localhost:3000/apis/profile         get
+
+
+http://localhost:3000/apis/logout         post
+
 
     Cursos 
 

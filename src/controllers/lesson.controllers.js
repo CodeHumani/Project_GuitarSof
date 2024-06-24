@@ -10,14 +10,14 @@ export const createLessonsController = catchedAsync(async (req, res) => {
     err.statusCode = 400;
     throw err;
   }
-  const { courseId, title, content, imagePath } = value;
-  const lesson = await createLesons(courseId, title, content, imagePath);
+  const { courseId, title, content, imagePath, url } = value;
+  const lesson = await createLesons(courseId, title, content, imagePath, url);
   response(res, 201, lesson);
 });
 
 export const updateLessonsController = catchedAsync(async (req, res) => {
-    const { id, title, content, imagePath } = req.body;
-    const lesson = await updateLessons(id, title, content, imagePath);
+    const { id, title, content, imagePath, url } = req.body;
+    const lesson = await updateLessons(id, title, content, imagePath, url);
     if (!lesson) {
       const err = new Error('Error update lessons');
       err.statusCode = 400;
