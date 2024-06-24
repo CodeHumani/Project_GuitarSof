@@ -30,6 +30,17 @@ export const getCommentByUser = async (id) => {
 };
 
 export const getCommentByLessons = async (lessonId) => {
-    const result = await pool.query('SELECT * FROM "Comments" WHERE lessonId = $1 and eliminar = true', [lessonId] );
-    return result.rows; 
+    const query = `
+        SELECT 
+            c.content,
+            u.name as userName
+        FROM 
+            "Comments" c
+        JOIN 
+            "Users" u ON c.userId = u.id
+        WHERE 
+            c.lessonId = $1 AND c.eliminar = true
+    `;
+    const result = await pool.query(query, [lessonId]);
+    return result.rows;
 };

@@ -28,7 +28,24 @@ export const getLessonByTittle = async (title) => {
 };
 
 export const getLessonByIdCourse = async (courseId) => {
-    return getCourseByFilters('Lessons', { courseId });
+    const query = `
+        SELECT 
+            l.id,
+            l.title,
+            l.content,
+            l.eliminar,
+            l.createdAt,
+            l.updatedAt,
+            c.title as courseTitle
+        FROM 
+            "Lessons" l
+        JOIN 
+            "Courses" c ON l.courseId = c.id
+        WHERE 
+            l.courseId = $1
+    `;
+    const result = await pool.query(query, [courseId]);
+    return result.rows;
 };
 
 export const deleteLesson = async (id) => {
