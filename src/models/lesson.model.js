@@ -1,16 +1,16 @@
 import pool from '../config/db.js';
 import { buildUpdateQuery, getCourseByFilters }  from '../libs/utils.js';
 
-export const createLesons  = async (courseId, title, content) => {
-    const result = await pool.query(
-        'INSERT INTO "Lessons" (courseId, title, content) VALUES ($1, $2, $3) RETURNING *', 
-        [courseId, title, content]
-    );
-    return result.rows[0];
+export const createLesons = async (courseId, title, content, imagePath) => {
+  const result = await pool.query(
+    'INSERT INTO "Lessons" (courseId, title, content, imagePath) VALUES ($1, $2, $3, $4) RETURNING *',
+    [courseId, title, content, imagePath]
+  );
+  return result.rows[0];
 };
 
-export const updateLessons = async (id, title, content) => {
-    const fieldsToUpdate = { title, content };
+export const updateLessons = async (id, title, content, imagepath) => {
+    const fieldsToUpdate = { title, content, imagepath};
     const { query, values } = buildUpdateQuery('Lessons', fieldsToUpdate, id);
     const result = await pool.query(query, values);
     if (result.rowCount === 0) {

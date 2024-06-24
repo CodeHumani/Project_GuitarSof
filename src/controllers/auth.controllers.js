@@ -14,31 +14,42 @@ export const register = catchedAsync(async (req, res) => {
   const { name, email, password } = value;
   const user = await createUser(name, email, password);
   const tokens = await createAccesToken({ id: user.id });
-  res.cookie('token', tokens);
-  response(res, 201, { id: user.id, email: user.email, tokens });
+  res.cookie('token', tokens, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict'
+  });
+  response(res, 201, { user, tokens });
 });
 
 export const login = catchedAsync(async (req, res) => {
   const { email, password } = req.body;
-  const userFound = await verifyUserCredentials(email, password);
-  if (!userFound) {
+  const user = await verifyUserCredentials(email, password);
+  if (!user) {
     const err = new Error('Credenciales incorrectas');
     err.statusCode = 401;
     throw err;
   }
-  const token = await createAccesToken({ id: userFound.id });
-  res.cookie('token', token);
-  response(res, 200, { id: userFound.id, email: userFound.email, token });
+  const token = await createAccesToken({ id: user.id });
+  res.cookie('token', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict'
+  });
+  response(res, 200, { user, token });
 });
 
 export const logout = catchedAsync(async (req, res) => {
-  res.cookie('token', "", {
-    expires: new Date(0)
+  res.cookie('token', '', {
+    expires: new Date(0),
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'Strict'
   });
-  res.sendStatus(200);
+  response(res, 404, token);
 });
 
 export const profile = catchedAsync(async (req, res) => {
-  const userFound = await getUserById(req.user.id);
-  response(res, 404, userFound);
+  const user = await getUserById(req.user.id);
+  response(res, 404, user);
 });

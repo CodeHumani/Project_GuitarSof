@@ -4,20 +4,20 @@ import lessonSchema  from '../schemas/lessonSchema.js';
 import { catchedAsync, response } from '../middlewares/catchedAsync.js';
 
 export const createLessonsController = catchedAsync(async (req, res) => {
-    const { error, value } = lessonSchema.validate(req.body);
-    const { courseId, title, content } = value;
-    if (error) {
-      const err = new Error(error.details[0].message);
-      err.statusCode = 400;
-      throw err;
-    }
-    const lesson = await createLesons(courseId, title, content);
-    response(res, 201, lesson);
+  const { error, value } = lessonSchema.validate(req.body);
+  if (error) {
+    const err = new Error(error.details[0].message);
+    err.statusCode = 400;
+    throw err;
+  }
+  const { courseId, title, content, imagePath } = value;
+  const lesson = await createLesons(courseId, title, content, imagePath);
+  response(res, 201, lesson);
 });
 
 export const updateLessonsController = catchedAsync(async (req, res) => {
-    const { id, title, content } = req.body;
-    const lesson = await updateLessons(id, title, content);
+    const { id, title, content, imagePath } = req.body;
+    const lesson = await updateLessons(id, title, content, imagePath);
     if (!lesson) {
       const err = new Error('Error update lessons');
       err.statusCode = 400;
