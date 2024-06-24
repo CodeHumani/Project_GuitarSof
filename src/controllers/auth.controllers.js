@@ -40,11 +40,5 @@ export const logout = catchedAsync(async (req, res) => {
 
 export const profile = catchedAsync(async (req, res) => {
   const userFound = await getUserById(req.user.id);
-  response(res, 404, {
-    id: userFound.id,
-    name: userFound.name,
-    email: userFound.email,
-    createdAt: userFound.createdAt,
-    updatedAt: userFound.updatedAt,
-  });
+  response(res, 404, userFound);
 });

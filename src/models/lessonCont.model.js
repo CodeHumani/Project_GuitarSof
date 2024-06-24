@@ -1,4 +1,5 @@
 import pool from '../config/db.js';
+import { getCourseByFilters }  from '../libs/utils.js';
 
 export const createLessonContent = async (lessonId, url, tipo) => {
     const result = await pool.query(
@@ -22,9 +23,6 @@ export const updateLessonContent = async (id, url) => {
             'UPDATE "LessonContent" SET url = NULL WHERE id = $1 RETURNING *', [id]
         );
     }
-    if (result.rowCount === 0) {
-        return null;
-    }
     return result.rows[0];
 };
 
@@ -34,8 +32,7 @@ export const getLessonContentAll = async () => {
 };
 
 export const getLessonContentById = async (id) => {
-    const result = await pool.query('SELECT * FROM "LessonContent" WHERE id = $1', [id]);
-    return result.rows[0];
+    return getCourseByFilters('LessonContent', { id });
 };
 
 export const verifi = async (lessonId, url) => {
@@ -44,8 +41,7 @@ export const verifi = async (lessonId, url) => {
 };
 
 export const getLessonContentByLessonId = async (lessonId) => {
-    const result = await pool.query('SELECT * FROM "LessonContent" WHERE lessonId = $1', [lessonId]);
-    return result.rows;
+    return getCourseByFilters('LessonContent', { lessonId });
 };
 
 export const deleteLessonContent = async (id) => {
