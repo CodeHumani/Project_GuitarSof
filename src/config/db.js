@@ -7,6 +7,9 @@ const pool = new Pool({
   database: 'test_database_xa9m',
   password: 'iEhIFdxZTWLSW7eUgcuwd6kSMUgiEEpo',
   port: 5432,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 export default pool;
