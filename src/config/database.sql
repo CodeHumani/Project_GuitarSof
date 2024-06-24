@@ -93,6 +93,8 @@ CREATE TABLE "Tablatures" (
   FOREIGN KEY (userId) REFERENCES "Users" (id) ON DELETE CASCADE
 );
 
+ALTER TABLE "LessonContent" ADD COLUMN tipo VARCHAR(255) NOT NULL DEFAULT 'youtuber';
+
 -- Eliminar el trigger y la función si existen
 DROP TRIGGER IF EXISTS set_course_id_trigger ON "LessonContent";
 DROP FUNCTION IF EXISTS set_course_id();

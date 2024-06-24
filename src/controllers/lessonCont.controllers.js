@@ -7,7 +7,11 @@ import multer from 'multer';
 
 export const createLessonContentController = catchedAsync(async (req, res) => {
     const { error, value } = lessonContentSchema.validate(req.body);
-    const { lessonId, url } = value;
+    const { lessonId, url, tipo } = value;
+    if (!tipo) {
+        const lessonContent = await createLessonContent(lessonId, url, 'youtuber');
+        return response(res, 201, lessonContent);
+    }
     ensureDirectoryExistence(`./uploads/${lessonId}`)
     saveImage(req.file, lessonId);
     const existingContent = await verifi(lessonId, req.file.originalname);
@@ -16,7 +20,7 @@ export const createLessonContentController = catchedAsync(async (req, res) => {
         err.statusCode = 400;
         throw err;
     }
-    const lessonContent = await createLessonContent(lessonId, req.file.originalname);
+    const lessonContent = await createLessonContent(lessonId, req.file.originalname, tipo);
     response(res, 201, lessonContent);
 });
 
@@ -35,10 +39,10 @@ function saveImage(file, lessonId) {
 }
 
 export const updateLessonContentController = catchedAsync(async (req, res) => {
-    const { id } = req.body;
+    const { id, url } = req.body;
     const codigo = await getLessonContentById(id);
     console.log(codigo.lessonid);
-    if(req.file) {
+    if (req.file && codigo.tipo !== 'youtuber') {
         ensureDirectoryExistence(`./uploads/${codigo.lessonid}`);
         saveImage(req.file, codigo.lessonid);
         const existingContent = await verifi(codigo.lessonid, req.file.originalname);
@@ -50,7 +54,7 @@ export const updateLessonContentController = catchedAsync(async (req, res) => {
         const lessonContent = await updateLessonContent(id, req.file.originalname);
         response(res, 201, lessonContent);
     }
-    const lessonContent = await updateLessonContent(id, null);
+    const lessonContent = await updateLessonContent(id, url);
     response(res, 201, lessonContent);
 });
 

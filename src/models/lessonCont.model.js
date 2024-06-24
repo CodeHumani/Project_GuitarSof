@@ -1,9 +1,9 @@
 import pool from '../config/db.js';
 
-export const createLessonContent = async (lessonId, url) => {
+export const createLessonContent = async (lessonId, url, tipo) => {
     const result = await pool.query(
-        'INSERT INTO "LessonContent" (lessonId, url) VALUES ($1, $2) RETURNING *', 
-        [lessonId, url]
+        'INSERT INTO "LessonContent" (lessonId, url, tipo) VALUES ($1, $2, $3) RETURNING *', 
+        [lessonId, url, tipo]
     );
     return result.rows[0];
 };
@@ -15,7 +15,7 @@ export const updateLessonContent = async (id, url) => {
     let result;
     if (url) {
         result = await pool.query(
-            'UPDATE "LessonContent" SET url = $1 WHERE id = $2 RETURNING *', [url, id]
+            'UPDATE "LessonContent" SET url = $2 WHERE id = $1 RETURNING *', [id, url]
         );
     } else {
         result = await pool.query(
