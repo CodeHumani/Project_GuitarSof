@@ -30,12 +30,7 @@ export const getLessonByTittle = async (title) => {
 export const getLessonByIdCourse = async (courseId) => {
     const query = `
         SELECT 
-            l.id,
-            l.title,
-            l.content,
-            l.eliminar,
-            l.createdAt,
-            l.updatedAt,
+            l.*,
             c.title as courseTitle
         FROM 
             "Lessons" l

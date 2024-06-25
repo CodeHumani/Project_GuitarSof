@@ -32,7 +32,7 @@ export const getCommentByUser = async (id) => {
 export const getCommentByLessons = async (lessonId) => {
     const query = `
         SELECT 
-            c.content,
+            c.*,
             u.name as userName
         FROM 
             "Comments" c

@@ -44,7 +44,7 @@ export const gestTitle =  catchedAsync(async (req, res) => {
 });
 
 export const gestlessonCour =  catchedAsync(async (req, res) => {
-    const { courseId } = req.body;
+    const { courseId } = req.params;
     const lesson = await getLessonByIdCourse(courseId);
     response(res, 201, lesson);
 });

@@ -10,6 +10,6 @@ router.put('/delete', authRequired, deleteLessons);
 
 router.get('/id', getLessonsId);
 router.get('/title', gestTitle);
-router.get('/idCourse', gestlessonCour);
+router.get('/:courseId', gestlessonCour);
 
 export default router;
