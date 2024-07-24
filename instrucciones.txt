@@ -1,0 +1,90 @@
+
+http://localhost:3000/apis/register       post
+
+http://localhost:3000/apis/login          pot
+
+       
+http://localhost:3000/apis/profile         get
+
+
+http://localhost:3000/apis/logout         post
+
+
+    Cursos 
+
+http://localhost:3000/apis/curso/create    post
+
+http://localhost:3000/apis/curso/update    put
+
+http://localhost:3000/apis/curso/delete    put
+
+http://localhost:3000/apis/curso/idUser    get
+devuelve todos los cursos creados por un usuario que este logeado
+
+http://localhost:3000/apis/curso/title      get
+devuelve todos los cursos con el title igual
+
+http://localhost:3000/apis/curso/id         get
+devuelve todos el curso por id
+
+
+http://localhost:3000/apis/curso/view       get
+devuelve todos los cursos
+
+
+        Lecciones
+
+http://localhost:3000/apis/leccion/create   post
+
+http://localhost:3000/apis/leccion/update   put
+
+http://localhost:3000/apis/leccion/delete   put
+
+http://localhost:3000/apis/leccion/delete   put
+
+http://localhost:3000/apis/leccion/id       get
+muestre la leccion por id
+
+http://localhost:3000/apis/leccion/title    get
+muestra la leccion por title 
+
+http://localhost:3000/apis/leccion/idCourse   get
+muestra todas las lecciones que pertenecen a un curso
+
+
+        Comentarios
+
+http://localhost:3000/apis/comentario/create   post
+
+http://localhost:3000/apis/comentario/update   put
+
+http://localhost:3000/apis/comentario/delete   put
+
+http://localhost:3000/apis/comentario/get      get
+devuelve el comentario por id
+
+http://localhost:3000/apis/comentario/getLesson  get
+devuelve todos los comentarios por id de la leccion
+
+subir documentos que pertenezcan a una leccion 
+solo sube un documento o file 
+
+http://localhost:3000/apis/contLeccion/create           post
+
+http://localhost:3000/apis/contLeccion/lessonContent   put
+
+http://localhost:3000/apis/contLeccion/lessonContent   delete
+
+
+http://localhost:3000/apis/contLeccion/lessonContent   delete
+
+http://localhost:3000/apis/contLeccion/lessonContent/:id   get
+muestra por id del contenido de la leccion
+
+
+http://localhost:3000/apis/contLeccion/lessonContent/lesson/4   get
+por leccion muestra todo el contenido que tiene el lessonId
+
+
+http://localhost:3000/apis/contLeccion/getAll   get
+muestra todo
